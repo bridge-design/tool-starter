@@ -1,1 +1,1 @@
-# Design System starter template
+# Design System starter
