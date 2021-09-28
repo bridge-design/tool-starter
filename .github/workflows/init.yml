@@ -1,0 +1,48 @@
+# This worflow runs once to initialize repository
+# In particular, it will replace assetPath with the repositiory name, in order toserve assets correctly.
+# Possibly one day Gatsby implements relative pathes, and this step can be skipped
+# details: https://github.com/gatsbyjs/gatsby/discussions/14161
+
+name: Init
+
+# Controls when the workflow will run
+on:
+  create:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  replace-path:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          ref: my-branch
+
+      - uses: actions/checkout@v2
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "/tool-starter"
+          replace: /${{github.event.repository.name}}
+
+      # Runs a set of commands using the runners shell
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          # Defaults to "Apply automatic changes"
+          commit_message: Replace asset prefix with repository name
+
+          # Optional. Disable dirty check and always try to create a commit and push
+          skip_dirty_check: true    
+
+          # Optional. Skip internal call to `git fetch`
+          skip_fetch: true    
+
+          # Optional. Prevents the shell from expanding filenames. 
+          # Details: https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html
+          disable_globbing: true
+          
+
+      
