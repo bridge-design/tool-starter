@@ -7,7 +7,7 @@ name: Init
 
 # Controls when the workflow will run
 on: 
- push:
+ create:
     branches:
       - main
 jobs:
@@ -45,7 +45,7 @@ jobs:
           ref: main
 
       - name: Remove workflow
-        run: rm .github/workflows/initialize.yml
+        run: rm .github/workflows/init.yml
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Remove init workflow
