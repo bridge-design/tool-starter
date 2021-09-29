@@ -6,8 +6,10 @@
 name: Init
 
 # Controls when the workflow will run
-on: [create]
-
+on: 
+ push:
+    branches:
+      - main
 jobs:
   replace-path:
     runs-on: ubuntu-latest
@@ -22,22 +24,31 @@ jobs:
         with:
           find: "/tool-starter"
           replace: /${{github.event.repository.name}}
-
-      # Runs a set of commands using the runners shell
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          # Defaults to "Apply automatic changes"
           commit_message: Replace asset prefix with repository name
-
-          # Optional. Disable dirty check and always try to create a commit and push
           skip_dirty_check: true    
-
-          # Optional. Skip internal call to `git fetch`
           skip_fetch: true    
-
-          # Optional. Prevents the shell from expanding filenames. 
-          # Details: https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html
           disable_globbing: true
+      - name: Fetch API Data 📦
+        uses: JamesIves/fetch-api-data-action@releases/v1
+        with:
+          ENDPOINT: https://bridgetool.vercel.app/api/project/ready
+          CONFIGURATION:  '{ "method": "POST", "headers": { "content-type": "application/json" }, "body": { "repoId": " ${{github.event.repository.id}}" } }'
+          retry: true
+          
+  remove-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Remove workflow
+        run: rm .github/workflows/initialize.yml
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Remove init workflow
           
 
       
