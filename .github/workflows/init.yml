@@ -7,7 +7,7 @@ name: Init
 
 # Controls when the workflow will run
 on: 
- create:
+ push:
     branches:
       - main
 jobs:
@@ -38,17 +38,18 @@ jobs:
           CONFIGURATION:  '{ "method": "POST", "headers": { "content-type": "application/json" }, "body": { "repoId": " ${{github.event.repository.id}}" } }'
           retry: true
           
-#   remove-workflow:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#         with:
-#           ref: main
+  remove-workflow:
+    runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'Initial commit')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
 
-#       - name: Remove workflow
-#         run: rm .github/workflows/init.yml
-#       - uses: stefanzweifel/git-auto-commit-action@v4
-#         with:
-#           commit_message: Remove init workflow
+      - name: Remove workflow
+        run: rm .github/workflows/init.yml
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Remove init workflow
           
 
