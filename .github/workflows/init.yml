@@ -21,7 +21,7 @@ jobs:
           ref: gh-pages
 
       - name: Find and Replace
-        uses: jacobtomlinson/gha-find-replace@v2
+        uses: jacobtomlinson/gha-find-replace@v1
         with:
           find: "/tool-starter"
           replace: /${{github.event.repository.name}}
