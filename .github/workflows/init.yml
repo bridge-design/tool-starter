@@ -35,7 +35,7 @@ jobs:
         uses: JamesIves/fetch-api-data-action@releases/v1
         with:
           ENDPOINT: https://bridgetool.vercel.app/api/project/ready
-          CONFIGURATION:  '{ "method": "POST", "headers": { "content-type": "application/json" }, "body": { "repoId": " ${{github.event.repository.id}}" } }'
+          CONFIGURATION:  '{ "method": "POST", "headers": { "content-type": "application/json" }, "body": { "repoId": "${{github.event.repository.id}}" } }'
           retry: true
           
   remove-workflow:
